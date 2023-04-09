@@ -12,8 +12,8 @@ using RestaurantAPI.Entities;
 namespace RestaurantAPI.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20230324103355_UserAndRoleAdd")]
-    partial class UserAndRoleAdd
+    [Migration("20230409191626_1dzienswiatLapek")]
+    partial class _1dzienswiatLapek
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,6 +99,9 @@ namespace RestaurantAPI.Migrations
                     b.Property<string>("ContactNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CreatedById")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -114,6 +117,8 @@ namespace RestaurantAPI.Migrations
 
                     b.HasIndex("AddressId")
                         .IsUnique();
+
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("Restaurants");
                 });
@@ -191,7 +196,13 @@ namespace RestaurantAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RestaurantAPI.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
                     b.Navigation("Address");
+
+                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.User", b =>

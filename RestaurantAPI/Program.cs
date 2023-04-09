@@ -41,7 +41,7 @@ builder.Services.AddAuthentication(option =>
     cfg.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = authenticationSettings.JwtIssuer,
-        ValidAudience = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer, 
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
     };
 });
@@ -72,18 +72,32 @@ builder.Services.AddScoped<IValidator<RestaurantQuery>, RestaurantQueryValidator
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontEndClient", builder =>
+        builder.AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+
+            );
+});
+
 
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
+app.UseResponseCaching();
+app.UseStaticFiles();
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
 seeder.Seed();
 var dbContext = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
 DataGenerator.Seed(dbContext);
+
+app.UseCors("FrontEndClient");
+
 
 
 if (app.Environment.IsDevelopment())
