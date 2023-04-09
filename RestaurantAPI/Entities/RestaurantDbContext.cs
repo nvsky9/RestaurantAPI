@@ -25,6 +25,7 @@ namespace RestaurantAPI.Entities
             modelBuilder.Entity<Restaurant>()
                 .Property(r => r.Name)
                 .IsRequired()
+                .HasColumnType("nvarchar")
                 .HasMaxLength(25);
 
             modelBuilder.Entity<Dish>()
