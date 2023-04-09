@@ -6,12 +6,16 @@ namespace RestaurantAPI.Authorization
     {
         Create,
         Read,
-        Update,
+        Modify,
+
         Delete
     }
     public class ResourceOperationRequirement : IAuthorizationRequirement
     {
-        public ResourceOperationRequirement (ResourceOperation resourceOperation)
+
+
+
+        public ResourceOperationRequirement(ResourceOperation resourceOperation)
         {
             ResourceOperation = resourceOperation;
 

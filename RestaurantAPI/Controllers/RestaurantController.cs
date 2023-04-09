@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
+using System.Security.Claims;
 
 namespace RestaurantAPI.Controllers
 {
@@ -45,7 +46,6 @@ namespace RestaurantAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
-
             var id = _restaurantService.Create(dto);
 
 
@@ -55,11 +55,11 @@ namespace RestaurantAPI.Controllers
 
 
         [HttpGet]
-        [Authorize(Policy = "Atleast20")]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        [AllowAnonymous]
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery query)
         {
 
-            var restaurantsDtos = _restaurantService.GetAll();
+            var restaurantsDtos = _restaurantService.GetAll(query);
             return Ok(restaurantsDtos);
 
         }

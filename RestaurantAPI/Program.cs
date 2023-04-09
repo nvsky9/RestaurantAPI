@@ -71,6 +71,7 @@ builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator
 builder.Services.AddScoped<IValidator<RestaurantQuery>, RestaurantQueryValidator>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontEndClient", builder =>
@@ -94,6 +95,7 @@ var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
 seeder.Seed();
 var dbContext = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
 DataGenerator.Seed(dbContext);
+
 app.UseCors("FrontEndClient");
 
 
