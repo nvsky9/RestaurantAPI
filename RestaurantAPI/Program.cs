@@ -57,7 +57,8 @@ builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHa
 builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeRequirmentHandler>();
 builder.Services.AddControllers();
 builder.Services.AddControllers().AddFluentValidation();
-builder.Services.AddDbContext<RestaurantDbContext>();
+builder.Services.AddDbContext<RestaurantDbContext>
+    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("RestaurantDbConnection")));
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
